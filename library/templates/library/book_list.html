@@ -1,0 +1,41 @@
+{% extends 'library/base.html' %}  <!-- Extend the base template -->
+{% load static %}  <!-- Load static files -->
+
+{% block title %}Book List - Bookify{% endblock %}  <!-- Set the page title -->
+
+{% block content %}  <!-- Start the content block -->
+    <header>
+        <h1>Available Books</h1>
+        
+    </header>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Availability</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.genre }}</td>
+                <td>{{ book.is_available|yesno:"Available, Not Available" }}</td>
+                <td>
+                    <a href="{% url 'issue_book' book.id %}" class="btn">Issue</a> <!-- Link to issue the book -->
+                    <a href="{% url 'book_detail' book.id %}" class="btn">View</a> <!-- Link to view book details -->
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No books available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}  <!-- End the content block -->

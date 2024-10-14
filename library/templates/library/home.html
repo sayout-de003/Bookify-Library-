@@ -1,0 +1,53 @@
+{% extends 'library/base.html' %}
+
+
+{% block title %}Home - Bookify Library Management System{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <section class="hero">
+        <h1>Welcome to Bookify</h1>
+        <p>Your digital library experience, redefined. Discover, issue, and read books online.</p>
+        <a href="{% url 'book_list' %}" class="btn">View Books</a>
+    </section>
+
+    <section class="features">
+        <h2>Features</h2>
+        <div class="feature-item">
+            <h3>Check Book Availability</h3>
+            <p>Quickly see which books are available and which ones are currently issued.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Issue Books with Ease</h3>
+            <p>Scan the QR code or enter book details to issue a book without waiting in line.</p>
+        </div>
+        <div class="feature-item">
+            <h3>E-Reading</h3>
+            <p>Read e-books directly on your device for a seamless experience.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Set and Track Goals</h3>
+            <p>Enhance your productivity by setting reading goals and tracking your progress.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Community Sharing</h3>
+            <p>Share your achievements, creative works, and more with the Bookify community.</p>
+        </div>
+    </section>
+
+    <section class="trending-books">
+        <h2>Trending Books</h2>
+        <div class="book-grid">
+            {% for book in trending_books %}
+            <div class="book-item">
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+                <h3>{{ book.title }}</h3>
+                <p>by {{ book.author }}</p>
+                <a href="{% url 'book_detail' book.id %}" class="btn">View Details</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
