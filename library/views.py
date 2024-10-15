@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Book
+from django.db import models
 
 
 # views.py
@@ -56,6 +57,29 @@ def logout_view(request):
 def home(request):
     return render(request, 'library/home.html')
 
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Book
+
 def book_list(request):
-    books = Book.objects.all()
-    return render(request, 'library/book_list.html', {'books': books})
+    # Get search parameters from the request
+    query = request.GET.get('q', '')
+    
+    # Filter books based on search query
+    if query:
+        books = Book.objects.filter(
+            models.Q(title__icontains=query) | 
+            models.Q(author__icontains=query) | 
+            models.Q(publication_date__year=query) | 
+            models.Q(rating__icontains=query) | 
+            models.Q(book_language__icontains=query)
+        )
+    else:
+        books = Book.objects.all()
+    
+    return render(request, 'library/book_list.html', {'books': books, 'query': query})
+

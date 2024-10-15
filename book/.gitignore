@@ -1,0 +1,5 @@
+book/
+
+git rm -r --cached book/
+git commit -m "Remove virtual environment from repository"
+git push

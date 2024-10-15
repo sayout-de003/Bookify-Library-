@@ -61,6 +61,7 @@ h1, h2, h3 {
     color: #333;
 }
 
+/* Button Styling */
 .btn {
     display: inline-block;
     background-color: #4CAF50;
@@ -69,6 +70,28 @@ h1, h2, h3 {
     text-decoration: none;
     border-radius: 5px;
     margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-primary {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
 /* Footer Styles */
@@ -82,7 +105,7 @@ footer {
     bottom: 0;
 }
 
-/* Responsive Styles */
+/* Responsive Navbar */
 @media (max-width: 768px) {
     .nav-links {
         flex-direction: column;
@@ -103,7 +126,7 @@ footer {
     }
 }
 
-
+/* Login Container Styles */
 .login-container {
     max-width: 400px;
     margin: 50px auto;
@@ -119,9 +142,14 @@ h2 {
     margin-bottom: 30px;
 }
 
+/* Form Styling */
 form {
     display: flex;
     flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -135,7 +163,12 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="file"],
+textarea,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -143,21 +176,15 @@ input[type="password"] {
     font-size: 16px;
 }
 
-button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
 }
 
-button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
+/* Register Link Styling */
 .register-link {
     text-align: center;
     margin-top: 20px;
@@ -172,135 +199,168 @@ button[type="submit"]:hover {
     text-decoration: underline;
 }
 
-/* styles.css */
-
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Book List Styles */
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+.book-slider {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    gap: 20px;
+    scroll-behavior: smooth;
 }
 
-/* Container and Layout */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+.book-slider::-webkit-scrollbar {
+    display: none;
 }
 
-h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
+.book-card {
+    min-width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.book-card-image img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.book-info {
+    padding: 10px;
     text-align: center;
+}
+
+.book-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.book-author,
+.book-genre,
+.book-language,
+.book-rating,
+.book-availability {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+.book-availability.available {
+    color: #28a745; /* Green */
+}
+
+.book-availability.not-available {
+    color: #dc3545; /* Red */
+}
+
+/* Gradient Overlay on Slider */
+.book-slider::before, .book-slider::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    pointer-events: none;
+}
+
+.book-slider::before {
+    left: 0;
+    background: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.book-slider::after {
+    right: 0;
+    background: linear-gradient(to left, #000 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* CSS for Image Styling */
+.book-card-image {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.book-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+    display: block;
+}
+
+.book-slider {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between cards */
+}
+
+.book-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 200px; /* Adjust width as needed */
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.book-card:hover {
+    transform: scale(1.05); /* Zoom effect on hover */
+}
+
+.book-card-image img {
+    width: 100%;
+    height: auto;
+}
+
+.book-info {
+    padding: 10px;
+}
+
+.book-availability {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.available {
+    color: green;
+}
+
+.not-available {
+    color: red;
+}
+
+.search-bar {
     margin-bottom: 20px;
 }
 
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Form Styling */
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-form .form-group {
-    margin-bottom: 15px;
-}
-
-form label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 5px;
-}
-
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form input[type="date"],
-form input[type="file"],
-form textarea,
-form select {
-    width: 100%;
+.search-bar input[type="text"] {
+    width: 300px; /* Adjust input width */
     padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-form input[type="file"] {
-    padding: 5px;
-}
-
-form input:focus,
-form textarea:focus,
-form select:focus {
-    outline: none;
-    border-color: #80bdff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-}
-
-/* Button Styling */
-.btn-primary {
-    display: inline-block;
-    width: 100%;
+.search-bar button {
     padding: 10px;
-    font-size: 16px;
-    color: #fff;
     background-color: #007bff;
+    color: white;
     border: none;
-    border-radius: 4px;
-    text-align: center;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-primary:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Links and Additional Styling */
-p {
-    text-align: center;
-    margin-top: 15px;
-}
-
-p a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-p a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    form {
-        padding: 15px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
+.search-bar button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
