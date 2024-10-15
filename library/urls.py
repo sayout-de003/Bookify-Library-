@@ -8,5 +8,6 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('books/<int:book_id>/', views.book_detail, name='book_detail'),
+    path('books/issue/', views.book_issue, name='book_issue'),
     # Add other URL patterns here
 ]

@@ -35,3 +35,29 @@ class UserRegistrationForm(UserCreationForm):
             )
             profile.save()
         return user
+
+from django import forms
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+from django import forms
+from .models import BookIssue
+
+class BookIssueForm(forms.ModelForm):
+    book_id = forms.CharField(max_length=10, label='Book ID')
+    book_copy_no = forms.CharField(max_length=10, label='Copy Number')
+
+    class Meta:
+        model = BookIssue
+        fields = ['book_id', 'book_copy_no']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        book_id = cleaned_data.get("book_id")
+        book_copy_no = cleaned_data.get("book_copy_no")
+
+        # Ensure both fields are filled
+        if not book_id or not book_copy_no:
+            raise forms.ValidationError("Both Book ID and Copy Number are required.")
+
+        return cleaned_data
