@@ -1,0 +1,22 @@
+{% extends "library/base.html" %}
+
+{% block title %}{{ book.title }} - Book Details{% endblock %}
+
+{% block content %}
+<div class="book-detail-container">
+    <h1>{{ book.title }}</h1>
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Publication Date:</strong> {{ book.publication_date }}</p>
+    <p><strong>Rating:</strong> {{ book.rating }}</p>
+    <p><strong>Language:</strong> {{ book.book_language }}</p>
+    <p><strong>Description:</strong> {{ book.description }}</p>
+    <p><strong>Availability:</strong> {{ book.available|yesno:"Available,Not Available" }}</p>
+    <p><strong>Book Image:</strong> {{ book.book_image.url }}</p>
+    <p><strong>Book PDF:</strong> {{ book.book_pdf.url }}</p>
+    {% if book.book_file %}
+        <p><strong>Book File:</strong> {{ book.book_file.url }}</p>
+    {% endif %}
+   
+    <a href="{% url 'book_list' %}" class="back-link">Back to Book List</a>
+</div>
+{% endblock %}

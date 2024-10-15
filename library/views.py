@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Book
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Book
 from django.db import models
-
+from django.shortcuts import get_object_or_404, render
 
 # views.py
 from django.shortcuts import render, redirect
@@ -83,3 +83,6 @@ def book_list(request):
     
     return render(request, 'library/book_list.html', {'books': books, 'query': query})
 
+def book_detail(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    return render(request, 'library/book_detail.html', {'book': book})

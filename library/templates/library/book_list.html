@@ -1,43 +1,145 @@
+
 {% extends 'library/base.html' %}
 {% load static %}
 
 {% block title %}Book List - Bookify{% endblock %}
 
 {% block content %}
-    <header>
-        <h1>Available Books</h1>
-        <form method="GET" class="search-bar">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search by title, author, year, rating, or language...">
-            <button type="submit">Search</button>
-           
-            
-        </form>
-        <br>
-            <br>
-            <br>
-            
-          
-    </header>
-    
-    <div class="book-slider">
-        {% for book in books %}
-        <div class="book-card">
-            <div class="book-card-image">
-                <img src="{{ book.book_image.url }}" alt="{{ book.title }}">
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">{{ book.title }}</h3>
-                <p class="book-author">{{ book.author }}</p>
-                <p class="book-genre">{{ book.genre|join:", " }}</p>
-                <p class="book-rating">⭐ {{ book.rating|default:"N/A" }}/5</p>
-                <p class="book-language">{{ book.book_language }}</p>
-                <p class="book-availability {% if book.available %}available{% else %}not-available{% endif %}">
-                    {{ book.available|yesno:"Available, Not Available" }}
-                </p>
-            </div>
+<header>
+    <h1>Available Books</h1>
+    <form method="GET" class="search-bar">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by title, author, year, rating, or language...">
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    <br>
+</header>
+
+<div class="book-slider">
+    {% for book in books %}
+    <a href="{% url 'book_detail' book.id %}" class="book-card">
+        <div class="book-card-image">
+            <img src="{{ book.book_image.url }}" alt="{{ book.title }}">
         </div>
-        {% empty %}
-        <p>No books available.</p>
-        {% endfor %}
-    </div>
+        <div class="book-info">
+            <h3 class="book-title">{{ book.title }}</h3>
+            <p class="book-author">{{ book.author }}</p>
+            <p class="book-genre">{{ book.genre|join:", " }}</p>
+            <p class="book-rating">⭐ {{ book.rating|default:"N/A" }}/5</p>
+            <p class="book-language">{{ book.book_language }}</p>
+            <p class="book-availability {% if book.available %}available{% else %}not-available{% endif %}">
+                {{ book.available|yesno:"Available, Not Available" }}
+            </p>
+        </div>
+    </a>
+    {% empty %}
+    <p>No books available.</p>
+    {% endfor %}
+</div>
+
+<style>
+    /* Basic styling for the header and form */
+    
+    
+    .search-bar {
+        margin-top: 1rem;
+        display: flex;
+    }
+    
+    .search-bar input[type="text"] {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px 0 0 4px;
+    }
+    
+    .search-bar button {
+        padding: 0.5rem 1rem;
+        border: none;
+        background-color: #5a67d8;
+        color: white;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+    }
+    
+    .search-bar button:hover {
+        background-color: #434190;
+    }
+    
+    /* Flexbox container for the book slider */
+    .book-slider {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    /* Styling each book card */
+    .book-card {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        background-color: #f4f4f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .book-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Image container within each book card */
+    .book-card-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Book info styling */
+    .book-info {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .book-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .book-author,
+    .book-genre,
+    .book-rating,
+    .book-language {
+        margin: 0.25rem 0;
+        color: #666;
+    }
+    
+    .book-availability {
+        margin-top: 0.5rem;
+        padding: 0.3rem 0.5rem;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    
+    .book-availability.available {
+        background-color: #48bb78;
+        color: white;
+    }
+    
+    .book-availability.not-available {
+        background-color: #e53e3e;
+        color: white;
+    }
+    </style>
+    
 {% endblock %}
