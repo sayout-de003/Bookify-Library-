@@ -1,0 +1,32 @@
+<!-- library/user_profile.html -->
+{% extends "library/base.html" %}
+
+{% block content %}
+<h2>User Profile</h2>
+
+<!-- Other user profile details can go here -->
+
+<h3>Book Issue History</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Fine</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book_issue in issued_books %}
+        <tr>
+            <td>{{ book_issue.book.title }}</td>
+            <td>{{ book_issue.issue_date }}</td>
+            <td>{{ book_issue.due_date }}</td>
+            <td>{{ book_issue.return_date|default:"Not Returned" }}</td>
+            <td>${{ book_issue.fine }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

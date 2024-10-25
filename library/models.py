@@ -95,13 +95,28 @@ class UserProfile(models.Model):
         return self.user.username
 
 # BookIssue model definition
+# models.py
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
+
 class BookIssue(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    book_copy_no = models.CharField(max_length=10)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    issue_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    book_copy_no = models.CharField(max_length=50)
+    issue_date = models.DateTimeField()
     due_date = models.DateTimeField()
-    return_date = models.DateTimeField(null=True, blank=True)
+    return_date = models.DateTimeField(null=True, blank=True)  # Returned books will have this field filled
+    fine = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
-    def __str__(self):
-        return f"{self.book.title} - {self.user.username}"
+    def calculate_fine(self):
+        if self.return_date and self.return_date > self.due_date:
+            overdue_days = (self.return_date - self.due_date).days
+            self.fine = overdue_days * 1.00  # Assuming a fine of 1.00 per overdue day
+        elif timezone.now() > self.due_date:
+            overdue_days = (timezone.now() - self.due_date).days
+            self.fine = overdue_days * 1.00
+        else:
+            self.fine = 0.00
+        return self.fine
+

@@ -1,0 +1,102 @@
+{% extends 'library/base.html' %}
+{% block content %}
+
+<h2>Admin Dashboard</h2>
+
+<form method="GET">
+    <div>
+        <label for="genre">Filter by Genre:</label>
+        <select name="genre" id="genre" multiple>
+            <option value="">All</option>
+            {% for genre in all_genres %}
+                <option value="{{ genre }}" {% if genre in selected_genres %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div>
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" id="start_date" value="{{ start_date }}">
+    </div>
+    
+    <div>
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
+    </div>
+    
+    <div>
+        <label for="available">Available:</label>
+        <select name="available" id="available">
+            <option value="">All</option>
+            <option value="true" {% if available_filter %}selected{% endif %}>Yes</option>
+            <option value="false" {% if not available_filter %}selected{% endif %}>No</option>
+        </select>
+    </div>
+    
+    <button type="submit">Filter</button>
+</form>
+
+<div>
+    <h3>Book Inventory</h3>
+    <p>Total Books: {{ books.count }}</p>
+    <p>Available Books: {{ available_books_count }}</p>
+    <p>Issued Books: {{ issued_books_count }}</p>
+    <p>Overdue Books: {{ overdue_books_count }}</p>
+</div>
+
+<div>
+    <h3>Popular Genres</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Genre</th>
+                <th>Number of Issues</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for genre in genre_popularity %}
+            <tr>
+                <td>{{ genre.genre }}</td>
+                <td>{{ genre.total_issues }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>Top 5 Popular Books</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Number of Issues</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in popular_books %}
+            <tr>
+                <td>{{ book.book__title }}</td>
+                <td>{{ book.issue_count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>Genre Popularity Chart</h3>
+    <div id="genre-popularity-chart"></div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    fetch("{% url 'genre_popularity_chart' %}")  
+      .then(response => response.json())
+      .then(data => {
+        let figure = JSON.parse(data);
+        Plotly.newPlot('genre-popularity-chart', figure.data, figure.layout);
+      });
+</script>
+
+{% endblock %}
