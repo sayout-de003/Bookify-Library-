@@ -23,6 +23,7 @@
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
                         <a href="{% url 'admin:index' %}" class="btn">Admin Login</a>
+                        <a href="{% url 'admin_control_panel' %}"class="btn">Admin Control</a>
                     {% endif %}
                     <a href="{% url 'logout' %}" class="btn">Logout</a>
                 {% else %}

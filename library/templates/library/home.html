@@ -39,6 +39,14 @@
             <h3>Community Sharing</h3>
             <p>Share your achievements, creative works, and more with the Bookify community.</p>
         </div>
+        {% if user.is_authenticated %}
+    <nav>
+        <ul>
+            <li><a href="{% url 'admin_control_panel' %}">Admin Control Panel</a></li>
+            <!-- Other navigation links -->
+        </ul>
+    </nav>
+{% endif %}
 
     </section>
 

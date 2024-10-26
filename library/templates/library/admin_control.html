@@ -1,0 +1,27 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block title %}Admin Control Panel{% endblock %}
+
+{% block content %}
+<h1>Admin Control Panel</h1>
+<p>Welcome to the Admin Control Panel. Here you can access various functionalities:</p>
+
+<ul>
+    <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'export_book_data' %}">Export Book Data (CSV)</a></li>
+    <li><a href="{% url 'genre_popularity_chart' %}">Genre Popularity Chart</a></li>
+    {% if user.is_superuser %}
+                        <a href="{% url 'admin:index' %}" class="btn">Admin Login</a>
+                        
+                    {% endif %}
+    
+
+<h2>Analysis Tools</h2>
+<p>Use the following analysis tools:</p>
+<ul>
+    <li><a href="{% url 'genre_popularity_chart' %}">View Genre Popularity</a></li>
+    <!-- Add more analysis tools links here -->
+</ul>
+
+{% endblock %}

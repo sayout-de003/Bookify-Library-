@@ -1,9 +1,14 @@
 {% extends 'library/base.html' %}
-{% block content %}
+{% load static %}
+{% load analytical %}
 
+{% block content %}
+{% analytical_body_top %}
 <h2>Admin Dashboard</h2>
 
-<form method="GET">
+<!-- Filter Form -->
+<form method="GET" id="filter-form">
+    <!-- Existing filter options -->
     <div>
         <label for="genre">Filter by Genre:</label>
         <select name="genre" id="genre" multiple>
@@ -13,29 +18,40 @@
             {% endfor %}
         </select>
     </div>
-    
+
     <div>
         <label for="start_date">Start Date:</label>
         <input type="date" name="start_date" id="start_date" value="{{ start_date }}">
     </div>
-    
+
     <div>
         <label for="end_date">End Date:</label>
         <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
     </div>
-    
+
     <div>
         <label for="available">Available:</label>
         <select name="available" id="available">
             <option value="">All</option>
-            <option value="true" {% if available_filter %}selected{% endif %}>Yes</option>
-            <option value="false" {% if not available_filter %}selected{% endif %}>No</option>
+            <option value="true" {% if available_filter == 'true' %}selected{% endif %}>Yes</option>
+            <option value="false" {% if available_filter == 'false' %}selected{% endif %}>No</option>
         </select>
     </div>
-    
-    <button type="submit">Filter</button>
+
+    <div>
+        <label for="chart_type">Chart Type:</label>
+        <select name="chart_type" id="chart_type">
+            <option value="bar" {% if chart_type == 'bar' %}selected{% endif %}>Bar</option>
+            <option value="line" {% if chart_type == 'line' %}selected{% endif %}>Line</option>
+            <option value="pie" {% if chart_type == 'pie' %}selected{% endif %}>Pie</option>
+            <!-- Add more chart types as needed -->
+        </select>
+    </div>
+
+    <button type="submit">Apply Filters</button>
 </form>
 
+<!-- Book Inventory Overview -->
 <div>
     <h3>Book Inventory</h3>
     <p>Total Books: {{ books.count }}</p>
@@ -44,59 +60,62 @@
     <p>Overdue Books: {{ overdue_books_count }}</p>
 </div>
 
+<!-- Top Users Table -->
 <div>
-    <h3>Popular Genres</h3>
+    <h3>Top Users</h3>
     <table>
         <thead>
             <tr>
-                <th>Genre</th>
-                <th>Number of Issues</th>
+                <th>Username</th>
+                <th>Total Issues</th>
             </tr>
         </thead>
         <tbody>
-        {% for genre in genre_popularity %}
+        {% for user in top_users %}
             <tr>
-                <td>{{ genre.genre }}</td>
-                <td>{{ genre.total_issues }}</td>
+                <td>{{ user.user__username }}</td>
+                <td>{{ user.total_issues }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
 
+<!-- Book Issuance Trend Chart -->
 <div>
-    <h3>Top 5 Popular Books</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Number of Issues</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for book in popular_books %}
-            <tr>
-                <td>{{ book.book__title }}</td>
-                <td>{{ book.issue_count }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h3>Book Issuance Trend Chart</h3>
+    <div id="book-issuance-trend-chart" style="width: 100%; height: 500px;"></div>
 </div>
 
+<!-- Genre Popularity Chart -->
 <div>
     <h3>Genre Popularity Chart</h3>
-    <div id="genre-popularity-chart"></div>
+    <div id="genre-popularity-chart" style="width: 100%; height: 500px;"></div>
 </div>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-    fetch("{% url 'genre_popularity_chart' %}")  
-      .then(response => response.json())
-      .then(data => {
-        let figure = JSON.parse(data);
-        Plotly.newPlot('genre-popularity-chart', figure.data, figure.layout);
-      });
+    // Plotly for genre popularity
+    const genreChartData = {{ chart_data|safe }};
+    Plotly.newPlot('genre-popularity-chart', genreChartData.data, genreChartData.layout);
+
+    // Plotly for book issuance trend
+    const issuanceChartData = {
+        data: [{
+            x: {{ issue_dates|safe }},
+            y: {{ issue_counts|safe }},
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Book Issuance Trend',
+        }],
+        layout: {
+            title: 'Book Issuance Trend Over Time',
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Number of Issues' },
+        }
+    };
+    Plotly.newPlot('book-issuance-trend-chart', issuanceChartData.data, issuanceChartData.layout);
 </script>
 
+{% analytical_body_bottom %}
 {% endblock %}

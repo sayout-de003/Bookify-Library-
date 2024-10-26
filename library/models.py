@@ -58,7 +58,7 @@ class Book(models.Model):
     available = models.BooleanField(default=True)
     rack_number = models.CharField(max_length=10)
     book_image = models.ImageField(upload_to='book_images/')
-    book_file = models.FileField(upload_to='book_files/', null=True, blank=True)
+    book_file = models.FileField(upload_to='book_files/', null=True, blank=True)  
     book_id = models.CharField(max_length=10, unique=True)
     book_copy_no = models.CharField(max_length=10)
     book_type = models.CharField(max_length=10, choices=BookType.choices)
@@ -71,8 +71,12 @@ class Book(models.Model):
     genre = MultiSelectField(choices=GENRE_CHOICES)
 
     @property
+    def is_available_for_e_reading(self):
+        return bool(self.book_file)
+    @property
     def book_unique_id(self):
-        return f"{self.book_id}-{self.book_copy_no}"
+        # Ensure this does not call __str__ or any method that leads to it
+        return self.id  # or however you define a unique ID
 
     def __str__(self):
         return f"{self.title} ({self.book_unique_id})"
@@ -120,3 +124,15 @@ class BookIssue(models.Model):
             self.fine = 0.00
         return self.fine
 
+from django.db import models
+from django.contrib.auth.models import User
+from .models import Book  # If Book is in the same models.py file, you can omit this
+
+class UserReadingProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    current_page = models.IntegerField(default=0)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.book.title} - Page {self.current_page}"

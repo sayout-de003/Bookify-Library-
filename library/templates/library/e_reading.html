@@ -1,0 +1,89 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block title %}Reading: {{ book.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Reading: {{ book.title }}</h1>
+<p>Current Page: <span id="current_page">{{ reading_progress.current_page }}</span> of {{ book.book_pages }}</p>
+
+<!-- Form to update progress manually or via AJAX -->
+<form method="POST" id="progress-form">
+  {% csrf_token %}
+  <input type="hidden" id="page-input" name="current_page" value="{{ reading_progress.current_page }}">
+  <label for="current_page">Manually enter current page:</label>
+  <input type="number" id="manual-page-input" name="current_page_manual" value="{{ reading_progress.current_page }}" max="{{ book.book_pages }}" required>
+  <button type="submit">Save Progress</button>
+</form>
+
+<!-- Book content (PDF or EPUB) -->
+<div id="ebook-viewer">
+  {% if file_extension == '.pdf' %}
+    <!-- Embed PDF file using iframe -->
+    <iframe src="{{ book.book_file.url }}" width="100%" height="600px" style="border:none;" onload="initProgressUpdate()"></iframe>
+  {% elif file_extension == '.epub' %}
+    <!-- Display ePub using ePub.js -->
+    <div id="epub-reader" style="width:100%; height:600px;"></div>
+    <script src="https://unpkg.com/epubjs/dist/epub.min.js"></script>
+    <script>
+      var book = ePub('{{ book.book_file.url }}');
+      var rendition = book.renderTo("epub-reader", { width: "100%", height: 600 });
+      rendition.display();
+      
+      // Update progress on page relocation for ePub
+      rendition.on("relocated", function(location) {
+        updateProgress(location.start.displayed.page);
+      });
+    </script>
+  {% else %}
+    <!-- Fallback for unsupported formats -->
+    <p>This format is not supported for in-app reading. <a href="{{ book.book_file.url }}">Download the file</a>.</p>
+  {% endif %}
+</div>
+
+<script>
+  // Function to update progress via AJAX
+  function updateProgress(currentPage) {
+    document.getElementById('page-input').value = currentPage;
+    document.getElementById('current_page').innerText = currentPage;
+
+    // Send the updated page number to the server using AJAX
+    const formData = new FormData(document.getElementById('progress-form'));
+
+    fetch('{% url "e_reading_view" book.id %}', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+      }
+    }).then(response => response.json()).then(data => {
+      console.log("Progress saved successfully");
+    }).catch(error => {
+      console.error("Error saving progress:", error);
+    });
+  }
+
+  // Initialize the progress update based on the scroll position (for PDF)
+  function initProgressUpdate() {
+    const iframe = document.querySelector('iframe');
+    iframe.contentWindow.addEventListener('scroll', function() {
+      const pageHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+      const currentPage = Math.ceil((iframe.contentWindow.scrollY + iframe.contentWindow.innerHeight) / pageHeight * {{ book.book_pages }});
+      updateProgress(currentPage);
+    }); 
+    // Ensure this closing bracket is present
+  } 
+  // Ensure this closing bracket is present
+
+  // Manually update progress on form submission
+  document.getElementById('progress-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const manualPageInput = document.getElementById('manual-page-input').value;
+    updateProgress(manualPageInput);
+  });
+</script>
+{% endblock %}

@@ -5,13 +5,6 @@ from .models import Book, BookIssue, UserProfile
 from django.db.models import Count
 import datetime
 
-from django.contrib import admin
-from django.urls import path
-from django.template.response import TemplateResponse
-from .models import Book, BookIssue, UserProfile
-from django.db.models import Count
-import datetime
-
 # Custom Admin Site
 class MyAdminSite(admin.AdminSite):
     def get_urls(self):
@@ -67,29 +60,12 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
     list_filter = ('date_of_birth',)
 
+# Register models with the default admin site
+admin.site.register(Book, BookAdmin)
+admin.site.register(BookIssue)
+admin.site.register(UserProfile, UserProfileAdmin)
 
-
-
-# Custom Admin for Book
-class BookAdmin(admin.ModelAdmin):
-    list_display = (
-        'title', 'author', 'publication_date', 'isbn', 'available', 
-        'book_type', 'book_language', 'book_id', 'book_copy_no', 
-        'book_publisher', 'book_edition', 'book_subject', 
-        'book_location', 'genre'
-    )
-    search_fields = ('title', 'author', 'isbn')
-    list_filter = ('book_type', 'book_language', 'available', 'genre')
-    readonly_fields = ('book_unique_id',)
-    list_per_page = 10
-
-# Custom Admin for UserProfile
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'date_of_birth')
-    search_fields = ('user__username', 'user__email')
-    list_filter = ('date_of_birth',)
-
-# Register your models with the custom admin site
+# Register models with the custom admin site
 admin_site.register(Book, BookAdmin)
 admin_site.register(BookIssue)
 admin_site.register(UserProfile, UserProfileAdmin)

@@ -1,4 +1,3 @@
-
 {% extends 'library/base.html' %}
 {% load static %}
 
@@ -7,7 +6,7 @@
 {% block content %}
 <header>
     <h1>Available Books</h1>
-    <form method="GET" class="search-bar">
+    <form method="GET" action="{% url 'book_list' %}" class="search-bar">
         <input type="text" name="q" value="{{ query }}" placeholder="Search by title, author, year, rating, or language...">
         <button type="submit">Search</button>
     </form>
@@ -15,6 +14,7 @@
     <br>
 </header>
 
+<!-- Book Slider View -->
 <div class="book-slider">
     {% for book in books %}
     <a href="{% url 'book_detail' book.id %}" class="book-card">
@@ -30,15 +30,33 @@
             <p class="book-availability {% if book.available %}available{% else %}not-available{% endif %}">
                 {{ book.available|yesno:"Available, Not Available" }}
             </p>
-            
         </div>
-    
+    </a>
     {% empty %}
     <p>No books available.</p>
     {% endfor %}
-    
-    <br>
 </div>
+
+<!-- Simple Book List View -->
+<ul>
+    {% for book in books %}
+    <li>
+        <h3>{{ book.title }} by {{ book.author }}</h3>
+        <p>Publication Date: {{ book.publication_date }}</p>
+        <p>Language: {{ book.book_language }}</p>
+        <p>Rating: {{ book.rating }}</p>
+
+        {% if book.e_reading_available %}
+        <p><strong>Available for e-reading</strong></p>
+        <a href="{% url 'e_reading_view' book.id %}">
+            <button>Read</button>
+        </a>
+        {% else %}
+        <p><strong>Not available for e-reading</strong></p>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 
 <style>
     /* General page styling */
@@ -168,7 +186,4 @@
 
 </style>
 
-
-
-    
 {% endblock %}
