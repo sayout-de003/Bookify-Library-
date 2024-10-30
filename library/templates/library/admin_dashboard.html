@@ -93,17 +93,18 @@
     <div id="genre-popularity-chart" style="width: 100%; height: 500px;"></div>
 </div>
 
+<!-- Ensure Plotly is loaded before your script -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-    // Plotly for genre popularity
-    const genreChartData = {{ chart_data|safe }};
+    // Ensure data is properly formatted as JSON
+    const genreChartData = JSON.parse('{{ chart_data|escapejs }}');
     Plotly.newPlot('genre-popularity-chart', genreChartData.data, genreChartData.layout);
 
-    // Plotly for book issuance trend
+    // Book issuance trend chart data
     const issuanceChartData = {
         data: [{
-            x: {{ issue_dates|safe }},
-            y: {{ issue_counts|safe }},
+            x: JSON.parse(document.getElementById('issue_dates').textContent),
+            y: JSON.parse(document.getElementById('issue_counts').textContent),
             type: 'scatter',
             mode: 'lines+markers',
             name: 'Book Issuance Trend',

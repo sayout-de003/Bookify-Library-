@@ -1,0 +1,39 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Create Reading Goal - Bookify{% endblock %}
+
+{% block content %}
+<div class="create-goal-container">
+    <h1>Create Your Reading Goal</h1>
+    <form method="POST" action="{% url 'goal_create_and_track' %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="goal_name">Goal Name</label>
+            <input type="text" id="goal_name" name="goal_name" class="form-control" placeholder="e.g., Read 5 Books This Week" required>
+        </div>
+
+        <div class="form-group">
+            <label for="books">Select Books for the Goal</label>
+            <select id="books" name="books" class="form-control" multiple required>
+                {% for book in available_books %}
+                    <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
+                {% endfor %}
+            </select>
+            <small>Hold Ctrl (or Cmd on Mac) to select multiple books.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="target_date">Target Completion Date</label>
+            <input type="date" id="target_date" name="target_date" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="checklist">Checklist (optional)</label>
+            <textarea id="checklist" name="checklist" class="form-control" rows="4" placeholder="e.g., Finish Chapter 1 by Tuesday, Finish Chapter 2 by Wednesday, etc."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Goal</button>
+    </form>
+</div>
+{% endblock %}

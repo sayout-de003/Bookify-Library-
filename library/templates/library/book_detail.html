@@ -11,10 +11,32 @@
     <p><strong>Language:</strong> {{ book.book_language }}</p>
     <p><strong>Description:</strong> {{ book.description }}</p>
     <p><strong>Availability:</strong> {{ book.available|yesno:"Available,Not Available" }}</p>
-    <p><strong>Book Image:</strong> {{ book.book_image.url }}</p>
-    <p><strong>Book PDF:</strong> {{ book.book_pdf.url }}</p>
+    <p><strong>Book Image:</strong> 
+        {% if book.book_image %}
+            <img src="{{ book.book_image.url }}" alt="{{ book.title }}" style="max-width: 200px;">
+        {% else %}
+            No image available.
+        {% endif %}
+    </p>
+    <p><strong>Book PDF:</strong> 
+        {% if book.book_pdf %}
+            <a href="{{ book.book_pdf.url }}">Download PDF</a>
+        {% else %}
+            No PDF available.
+        {% endif %}
+    </p>
+    
     {% if book.book_file %}
-        <p><strong>Book File:</strong> {{ book.book_file.url }}</p>
+        <p><strong>Book File:</strong> 
+            <a href="{{ book.book_file.url }}">Download Book File</a>
+        </p>
+    {% endif %}
+    
+    <!-- E-Reading Availability -->
+    {% if book.is_available_for_e_reading %}
+        <a href="{% url 'e_reading_view' book.id %}" class="btn btn-primary">Start E-Reading</a>
+    {% else %}
+        <p>This book is not available for e-reading.</p>
     {% endif %}
    
     <a href="{% url 'book_list' %}" class="back-link">Back to Book List</a>

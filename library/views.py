@@ -16,7 +16,7 @@ import os
 import plotly  # Add this import
 
 from .forms import UserRegistrationForm, BookIssueForm
-from .models import Book, BookIssue, UserReadingProgress# Add this import
+from .models import Book, BookIssue, UserReadingProgress, UserProfile  # Add UserProfile to the import
 
 # User Registration View
 def register(request):
@@ -112,11 +112,16 @@ def book_issue(request):
 @login_required
 def user_profile(request):
     issued_books = BookIssue.objects.filter(user=request.user).order_by('-issue_date')
+    goals = Goal.objects.filter(user=request.user)
+
     for book_issue in issued_books:
-        book_issue.calculate_fine()  # Assuming this method calculates fines
+        book_issue.calculate_fine()
         book_issue.save()
 
-    return render(request, 'library/user_profile.html', {'issued_books': issued_books})
+    return render(request, 'library/user_profile.html', {
+        'issued_books': issued_books,
+        'goals': goals,
+    })
 
 
 
@@ -254,7 +259,6 @@ def export_book_data(request):
 
     return response
 
-# E-Reading View
 @login_required
 def e_reading_view(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -286,9 +290,53 @@ def e_reading_view(request, book_id):
 
     return render(request, 'library/e_reading.html', context)
 
+
 # Admin Control Panel View
 @login_required
 def admin_control_panel(request):
     return render(request, 'library/admin_control.html')  # Admin control panel
 
 
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Goal
+from .forms import GoalForm
+
+@login_required
+def goal_create_and_track(request):
+    if request.method == 'POST':
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.user = request.user
+            goal.save()
+            form.save_m2m()  # Save many-to-many relationships
+            messages.success(request, 'Your goal has been created!')
+            return redirect('user_profile')
+    else:
+        form = GoalForm()
+
+    return render(request, 'library/goal_create.html', {'form': form})
+
+
+
+
+
+
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
+from .models import Goal
+
+def send_goal_reminder():
+    overdue_goals = Goal.objects.filter(target_completion_date__lt=timezone.now(), completed=False)
+    for goal in overdue_goals:
+        user_email = goal.user.email
+        send_mail(
+            'Reminder: Your reading goal is overdue',
+            f'Dear {goal.user.username},\n\nYour goal to complete "{goal.goal_name}" is overdue. Please check your progress.',
+            settings.DEFAULT_FROM_EMAIL,
+            [user_email],
+        )

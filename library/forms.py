@@ -61,3 +61,16 @@ class BookIssueForm(forms.ModelForm):
             raise forms.ValidationError("Both Book ID and Copy Number are required.")
 
         return cleaned_data
+
+
+from django import forms
+from .models import Goal, Book
+
+class GoalForm(forms.ModelForm):
+    class Meta:
+        model = Goal
+        fields = ['goal_name', 'books', 'target_completion_date']
+        widgets = {
+            'books': forms.CheckboxSelectMultiple,  # Users can select multiple books
+            'target_completion_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

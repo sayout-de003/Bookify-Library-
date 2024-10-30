@@ -136,3 +136,25 @@ class UserReadingProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.book.title} - Page {self.current_page}"
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+class Goal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    goal_name = models.CharField(max_length=255)
+    books = models.ManyToManyField('Book')  # Multiple books can be selected for a goal
+    target_completion_date = models.DateTimeField()
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_overdue(self):
+        return timezone.now() > self.target_completion_date and not self.completed
+
+    def __str__(self):
+        return self.goal_name
+
+

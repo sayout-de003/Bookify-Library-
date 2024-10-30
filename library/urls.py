@@ -13,9 +13,10 @@ urlpatterns = [
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin_export-books/', views.export_book_data, name='export_book_data'),
     path('genre_popularity_chart/', views.genre_popularity_chart, name='genre_popularity_chart'),
-    path('e_reading_view/', views.e_reading_view, name='e_reading_view'),
+    path('books/<int:book_id>/e-reading/', views.e_reading_view, name='e_reading_view'),
     path('admin_control/', views.admin_control_panel, name='admin_control_panel'),  # Add this line
+    path('goal_set/', views.goal_create_and_track, name = 'goal_create_and_track')
+
     
-      # Ensure this line is present
 ]
 
