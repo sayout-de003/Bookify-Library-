@@ -15,7 +15,9 @@ urlpatterns = [
     path('genre_popularity_chart/', views.genre_popularity_chart, name='genre_popularity_chart'),
     path('books/<int:book_id>/e-reading/', views.e_reading_view, name='e_reading_view'),
     path('admin_control/', views.admin_control_panel, name='admin_control_panel'),  # Add this line
-    path('goal_set/', views.goal_create_and_track, name = 'goal_create_and_track')
+    path('goal_set/', views.goal_create_and_track, name = 'goal_create_and_track'),
+    path('community/share/', views.community_share, name='community_share'),
+    path('community/posts/', views.community_posts, name='community_posts'),
 
     
 ]

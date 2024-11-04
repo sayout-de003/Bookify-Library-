@@ -1,0 +1,48 @@
+<!-- templates/library/community_posts.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Posts</title>
+</head>
+<body>
+    <h1>Community Posts</h1>
+    <a href="{% url 'community_share' %}">Share a New Post</a>
+    <div class="post-list">
+        {% for post in posts %}
+            <div class="post-item">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.description }}</p>
+
+                <!-- Display video if available -->
+                {% if post.video %}
+                    <video controls width="400">
+                        <source src="{{ post.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% endif %}
+
+                <!-- Display image if available -->
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Image for {{ post.title }}" width="400">
+                {% endif %}
+
+                <!-- Display document if available -->
+                {% if post.document %}
+                    <p><a href="{{ post.document.url }}" download>Download Document</a></p>
+                {% endif %}
+
+                <!-- Display research link if available -->
+                {% if post.research_link %}
+                    <p><a href="{{ post.research_link }}" target="_blank">View Research Link</a></p>
+                {% endif %}
+
+                <p>Posted by {{ post.user.username }} on {{ post.created_at }}</p>
+                <!-- Like Button (add backend functionality later) -->
+                <button>Like</button> 
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

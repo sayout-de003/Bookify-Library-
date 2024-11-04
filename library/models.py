@@ -158,3 +158,19 @@ class Goal(models.Model):
         return self.goal_name
 
 
+from django.db import models
+from django.contrib.auth.models import User
+
+class CommunityPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    video = models.FileField(upload_to='community/videos/', blank=True, null=True)
+    image = models.ImageField(upload_to='community/images/', blank=True, null=True)
+    document = models.FileField(upload_to='community/documents/', blank=True, null=True)
+    research_link = models.URLField(blank=True, null=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
+
+    def __str__(self):
+        return self.title

@@ -74,3 +74,20 @@ class GoalForm(forms.ModelForm):
             'books': forms.CheckboxSelectMultiple,  # Users can select multiple books
             'target_completion_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
+
+from django import forms
+from .models import CommunityPost
+
+class CommunityPostForm(forms.ModelForm):
+    class Meta:
+        model = CommunityPost
+        fields = ['title', 'description', 'video', 'image', 'document', 'research_link']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([cleaned_data.get('video'), cleaned_data.get('image'), cleaned_data.get('document'), cleaned_data.get('research_link')]):
+            raise forms.ValidationError("Please upload or provide at least one type of content.")
+        return cleaned_data
+       

@@ -340,3 +340,27 @@ def send_goal_reminder():
             settings.DEFAULT_FROM_EMAIL,
             [user_email],
         )
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import CommunityPostForm
+from .models import CommunityPost
+
+@login_required
+def community_share(request):
+    if request.method == 'POST':
+        form = CommunityPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            form.save_m2m()  # Save many-to-many data (like user likes)
+            return redirect('community_posts')
+    else:
+        form = CommunityPostForm()
+    return render(request, 'library/community_share.html', {'form': form})
+
+def community_posts(request):
+    posts = CommunityPost.objects.all().order_by('-created_at')
+    return render(request, 'library/community_posts.html', {'posts': posts})

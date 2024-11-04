@@ -1,0 +1,17 @@
+<!-- templates/library/community_share.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Share with the Community</title>
+</head>
+<body>
+    <h1>Share with the Community</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Share</button>
+    </form>
+    <a href="{% url 'community_posts' %}">Back to Community</a>
+</body>
+</html>
