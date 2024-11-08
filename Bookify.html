@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.8.0/styles/default.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/style.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.2/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/index.js"></script><script>(r => {
+                setTimeout(r);
+              })(() => {
+  const {
+    markmap,
+    mm
+  } = window;
+  const {
+    el
+  } = markmap.Toolbar.create(mm);
+  el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, root2, jsonOptions) => {
+              const markmap = getMarkmap();
+              window.mm = markmap.Markmap.create(
+                "svg#mindmap",
+                (getOptions || markmap.deriveOptions)(jsonOptions),
+                root2
+              );
+            })(() => window.markmap,null,{"content":"Bookify: Your Library","children":[{"content":"Features","children":[{"content":"User Management","children":[{"content":"<strong>Registration</strong> and <strong>Authentication</strong>: Secure user registration, login, and logout functionality.","children":[],"payload":{"lines":"9,10"}},{"content":"<strong>User Profile</strong>: A profile page for users to view their reading progress, issued books, and goals.","children":[],"payload":{"lines":"10,12"}}],"payload":{"lines":"8,9"}},{"content":"Book Management","children":[{"content":"<strong>Book Listing</strong>: View all available books, search by title, author, genre, or publication year.","children":[],"payload":{"lines":"13,14"}},{"content":"<strong>Book Details</strong>: Detailed view for each book, including author, genre, availability, and more.","children":[],"payload":{"lines":"14,15"}},{"content":"<strong>Book Issue</strong>: Issue a book copy if available; the app automatically sets a due date.","children":[],"payload":{"lines":"15,17"}}],"payload":{"lines":"12,13"}},{"content":"Advanced Functionality","children":[{"content":"<strong>E-Reading</strong>: Access digital copies of books (PDF/ePub) with tracked reading progress.","children":[],"payload":{"lines":"18,19"}},{"content":"<strong>Admin Dashboard</strong>: Library management tools, including book statistics, issuance trends, and top user activity tracking.","children":[],"payload":{"lines":"19,21"}}],"payload":{"lines":"17,18"}},{"content":"Community Sharing","children":[{"content":"<strong>Community Posts</strong>: Share creative works, documents, videos, and more with other users.","children":[],"payload":{"lines":"22,23"}},{"content":"<strong>Goal Tracking</strong>: Set and track reading goals, with reminders for overdue goals.","children":[],"payload":{"lines":"23,25"}}],"payload":{"lines":"21,22"}},{"content":"Data Export","children":[{"content":"<strong>CSV Export</strong>: Export book data to CSV files for administrative purposes.","children":[],"payload":{"lines":"26,28"}}],"payload":{"lines":"25,26"}},{"content":"Visualizations","children":[{"content":"<strong>Charts and Graphs</strong>: View statistics such as genre popularity and issuance trends using Plotly.","children":[],"payload":{"lines":"29,31"}}],"payload":{"lines":"28,29"}}],"payload":{"lines":"6,7"}},{"content":"Installation","children":[{"content":"<strong>Clone the repository</strong>:<pre><code class=\"language-bash\">git <span class=\"hljs-built_in\">clone</span> https://github.com/sayout-de003/Bookify-Library-\n</code></pre>","children":[],"payload":{"lines":"33,37"}},{"content":"<strong>Install dependencies</strong>:<pre><code class=\"language-bash\">pip install -r requirements.txt\n</code></pre>","children":[],"payload":{"lines":"37,41"}},{"content":"<strong>Apply migrations</strong>:<pre><code class=\"language-bash\">python manage.py migrate\n</code></pre>","children":[],"payload":{"lines":"41,45"}},{"content":"<strong>Create a superuser</strong>:<pre><code class=\"language-bash\">python manage.py createsuperuser\n</code></pre>","children":[],"payload":{"lines":"45,49"}},{"content":"<strong>Run the server</strong>:<pre><code class=\"language-bash\">python manage.py runserver\n</code></pre>","children":[],"payload":{"lines":"49,55"}}],"payload":{"lines":"31,32"}},{"content":"Usage","children":[{"content":"<strong>Access the Admin Dashboard</strong>: <code>/admin</code>","children":[],"payload":{"lines":"65,66"}},{"content":"<strong>User Registration and Login</strong>: <code>/register</code> and <code>/login</code>","children":[],"payload":{"lines":"66,67"}},{"content":"<strong>Library Features</strong>: Users can issue books, set goals, access e-books, and more.","children":[],"payload":{"lines":"67,68"}},{"content":"<strong>Community Sharing</strong>: Share and view posts at <code>/community_posts</code>.","children":[],"payload":{"lines":"68,70"}}],"payload":{"lines":"63,64"}},{"content":"License","children":[],"payload":{"lines":"70,71"}}],"payload":{"lines":"2,3"}},{})</script>
+</body>
+</html>

@@ -13,7 +13,7 @@ import plotly.graph_objs as go
 import json
 import csv
 import os
-import plotly  # Add this import
+import plotly 
 
 from .forms import UserRegistrationForm, BookIssueForm
 from .models import Book, BookIssue, UserReadingProgress, UserProfile  # Add UserProfile to the import

@@ -52,7 +52,13 @@ Bookify is a comprehensive library management application built using Django. It
    python manage.py runserver
    ```
 
+ER Diagram
 
+![ER Diagram](https://github.com/sayout-de003/Bookify-Library-/blob/main/ER%20Diagram.png)
+
+![alt text](image.png)
+
+## Contributing
 Contact
 
 For any questions, suggestions, or feedback, please feel free to contact the project maintainer:
